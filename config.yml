@@ -1,0 +1,10 @@
+#Delete this if you wanna use the default file..
+#You can only save "strings" but if you use Integer.parseInt(value)
+#you can obtain the value of the sting in integer
+
+name: "Alessandro"
+surname: "zago"
+age: "18"
+hasDriverLicence: "true"
+uid: "37y78i"
+
