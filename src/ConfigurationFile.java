@@ -8,6 +8,16 @@ import java.util.Scanner;
 
 public class ConfigurationFile {
 
+    private static final String RESET = "\u001B[0m";
+    private static final String BLACK = "\u001B[30m";
+    private static final String RED = "\u001B[31m";
+    private static final String GREEN = "\u001B[32m";
+    private static final String YELLOW = "\u001B[33m";
+    private static final String BLUE = "\u001B[34m";
+    private static final String PURPLE = "\u001B[35m";
+    private static final String CYAN = "\u001B[36m";
+    private static final String WHITE = "\u001B[37m";
+
     private File file;
     private HashMap<String, String> data;
 
@@ -27,9 +37,9 @@ public class ConfigurationFile {
             this.file = new File(path);
 
             if(file.createNewFile()){
-                System.out.println("File created: " + file.getName() + " in the following path: " + file.getAbsolutePath());
+                System.out.println(BLUE + "File created: " + file.getName() + " in the following path: " + file.getAbsolutePath() + RESET);
             }else{
-                System.out.println("Preparing file variables of " + file.getName());
+                System.out.println(GREEN + "Preparing file variables of " + file.getName() + RESET);
             }
 
             this.data = new HashMap<>();
@@ -58,9 +68,6 @@ public class ConfigurationFile {
         writeFile();
     }
 
-    /**
-     * private function that is made to read the file line by line and saved the information in a hashMap that is named data.
-     */
     //TODO gestire se ci sono ogetti
     /*
      *esempio:
@@ -72,6 +79,9 @@ public class ConfigurationFile {
      *
      * per ora riesco a gestire tante variabili ma nessun costrutto...
      */
+    /**
+     * private function that is made to read the file line by line and saved the information in a hashMap that is named data.
+     */
     private void readFile(){
         try {
             FileReader fr = new FileReader(file);
@@ -79,15 +89,22 @@ public class ConfigurationFile {
 
             StringBuilder path = new StringBuilder();
 
+            int couneter = 0;
+
             while(scanner.hasNextLine()){
+                couneter++;
                 String line = scanner.nextLine();
-                if(line.length() == 0){
-                    break;
+
+                if(line.length() != 0){
+                    if(line.charAt(0) != '#'){
+                        String[] split = line.split(" ");
+
+                        data.put(split[0].replace(":", ""), split[1].replace("\"", ""));
+                    }else{
+                        System.out.println(YELLOW + "A comment at line: " + couneter + " has been found!" + RESET);
+                    }
+
                 }
-
-                String[] split = line.split(" ");
-
-                data.put(split[0].replace(":", ""), split[1].replace("\"", ""));
            }
 
             fr.close();
