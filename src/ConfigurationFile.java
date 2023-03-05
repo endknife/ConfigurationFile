@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 public class ConfigurationFile {
 
+    private static final String REMOVE = "    ";
     private static final String RESET = "\u001B[0m";
     private static final String BLACK = "\u001B[30m";
     private static final String RED = "\u001B[31m";
@@ -87,30 +88,84 @@ public class ConfigurationFile {
             FileReader fr = new FileReader(file);
             Scanner scanner = new Scanner(fr);
 
+            //TODO devo migliorare la decodifica delle variabili dal file (oggetti), problemi con l'aggiornamento del path, se passo da un ogetto interno a esteron il mio algorittmo non capisce
+            /*
+            lo StringBuilder PATH contiene la path aggiornata della variabile
+            esempio:
+
+            --FILE--
+            Macchine:
+                Porsche:
+                    Modelli:
+                        911:
+                            cavalli: "190"
+                            creata: "15/08/98"
+                            cilindrata: "3000"
+                            kW: "80"
+                            ingenniere: "Fabio Gustavo"
+
+             --OUTPUT DELLE VATIE VARIABILI--
+             Macchine.Porsche.Modelli.911.cavalli: "190"
+             Macchine.Porsche.Modelli.911.creata: "15/08/98"
+             Macchine.Porsche.Modelli.911.cilindrata: "3000"
+             Macchine.Porsche.Modelli.911.kW: "80"
+             Macchine.Porsche.Modelli.911.ingenniere: "Fabio-Gustavo"
+             */
             StringBuilder path = new StringBuilder();
 
             int couneter = 0;
+            int builder = 0;
 
             while(scanner.hasNextLine()){
                 couneter++;
+                System.out.println(RED + "couneter: " + couneter + RESET);
                 String line = scanner.nextLine();
 
+                /*
+                1) Verifica se la lunghezza è diversa da zero
+                2) Verifica se è un commento o meno
+                3) Se la linea estratta dal file contiene un tab viene usata la funzione replace che rimpiazza il tab con nulla (REMOVE)
+                 */
                 if(line.length() != 0){
+
                     if(line.charAt(0) != '#'){
+                        if(line.contains(REMOVE)){
+                            line = line.replace(REMOVE, "");
+                        }else{
+
+                        }
+
+                        //Split delle stringhe in un array delimitato dallo spazzio " ".
                         String[] split = line.split(" ");
 
-                        data.put(split[0].replace(":", ""), split[1].replace("\"", ""));
+                        System.out.println(split.length);
+
+                        //Se l'array è lungo soltanto uno, significa che è un'oggetto, sennò un'attributo.
+                        //se oggetto aggiunge al path il nome dell'ogetto mettendoci un punto alla fine.
+                        //se invece trova un'attributo lo aggiunge per poi toglierlo (non mi so spiegare)
+                        if(split.length == 1){
+                            //System.out.println("ogetto");
+                            path.append(split[0].replace(":", "") + ".");
+                            builder = path.length();
+                        }else{
+                            //System.out.println("attributo");
+                            path.append(split[0].replace(":", ""));
+
+                            data.put(path.toString(), split[1].replace("\"", ""));
+                            System.out.println(path);
+
+                            path.delete(builder, path.length());
+                        }
                     }else{
                         System.out.println(YELLOW + "A comment at line: " + couneter + " has been found!" + RESET);
                     }
-
                 }
            }
 
             fr.close();
             scanner.close();
         }catch (IOException e){
-
+            e.printStackTrace();
         }
     }
 
@@ -163,7 +218,13 @@ public class ConfigurationFile {
 
     @Override
     public String toString() {
-        return data.toString();
+        StringBuilder str = new StringBuilder();
+
+        for ( String key : data.keySet() ) {
+            str.append(key + ": " + data.get(key) + "\n");
+        }
+
+        return str.toString();
     }
 }
 

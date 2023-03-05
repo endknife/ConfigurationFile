@@ -1,0 +1,15 @@
+Macchine:
+    Porsche:
+        Modelli:
+            911:
+                cavalli: "190"
+                creata: "15/08/98"
+                cilindrata: "3000"
+                kW: "80"
+                ingenniere: "Fabio-Gustavo"
+            Cayenne:
+                cavalli: "290"
+                creata: "03/11/97"
+                cilindrata: "5000"
+                kW: "130"
+                ingenniere: "Martino-Juliani"
