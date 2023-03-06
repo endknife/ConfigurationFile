@@ -133,7 +133,7 @@ public class ConfigurationFile {
 
             while(scanner.hasNextLine()){
                 couneter++;
-                System.out.println(RED + "couneter: " + couneter + RESET);
+                //System.out.println(RED + "couneter: " + couneter + RESET);
                 String line = scanner.nextLine();
 
                 /*
@@ -153,7 +153,7 @@ public class ConfigurationFile {
                         //Split delle stringhe in un array delimitato dallo spazzio " ".
                         String[] split = line.split(" ");
 
-                        System.out.println(split.length);
+                        //System.out.println(split.length);
 
                         //Se l'array è lungo soltanto uno, significa che è un'oggetto, sennò un'attributo.
                         //se oggetto aggiunge al path il nome dell'ogetto mettendoci un punto alla fine.
@@ -174,7 +174,7 @@ public class ConfigurationFile {
                                 path.append(split[0].replace(":", ""));
 
                                 data.put(path.toString(), split[1].replace("\"", ""));
-                                System.out.println(path);
+                                ///System.out.println(path);
 
                                 path.delete(builder, path.length());
                             }
@@ -241,11 +241,9 @@ public class ConfigurationFile {
         arr[0] = arr[0].replace("[", "");
         arr[arr.length-1] = arr[arr.length-1].replace("]", "");
 
-        for(String str : arr){
-            str = str.replace("\"", "");
+        for(int i = 0; i< arr.length-1; i++){
+            arr[i] = arr[i].replace("\"", "");
         }
-
-        System.out.println(YELLOW + arr[arr.length-1] + RESET);
 
         return arr;
     }
