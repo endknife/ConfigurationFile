@@ -33,6 +33,7 @@ public class ConfigurationFile {
      * Implemented:
      * <ul>
      *     <li>Variables</li>
+     *     <li>Arrays</li>
      * </ul>
      * Partially implemented:
      * <ul>
@@ -41,7 +42,6 @@ public class ConfigurationFile {
      * Coming soon:
      * <ul>
      *       <li>Lists</li>
-     *      <li>Arrays</li>
      * </ul>
      * Created by ogaz
      * <br></br>
