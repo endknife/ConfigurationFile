@@ -200,7 +200,11 @@ public class ConfigurationFile {
             FileWriter fw = new FileWriter(file);
 
             for ( String key : data.keySet() ) {
-                fw.write(key + ": \"" + data.get(key) + "\"\n");
+                if(data.get(key).startsWith("[") && data.get(key).endsWith("]")){
+                    fw.write(key + ": " + data.get(key) + "\n");
+                }else{
+                    fw.write(key + ": \"" + data.get(key) + "\"\n");
+                }
             }
             fw.flush();
             fw.close();
@@ -211,6 +215,21 @@ public class ConfigurationFile {
 
     public void deleteString(String path){
         data.remove(path);
+    }
+
+    public void deleteAll(){
+        if(isEmpty()){
+            System.out.println(YELLOW + "File is already empty");
+        }else{
+            try {
+                FileWriter fr = new FileWriter(file);
+
+                fr.flush();
+                fr.close();
+            }catch (IOException e){
+
+            }
+        }
     }
 
     public void modifyString(String path, String value){
@@ -235,7 +254,7 @@ public class ConfigurationFile {
         StringBuilder strB = new StringBuilder();
         //str.append();
         if(array == null){
-            System.out.println("array is null");
+            System.out.println(RED + "The array that was given is null!" + RESET);
             return;
         }
 
@@ -251,11 +270,7 @@ public class ConfigurationFile {
 
         strB.append("]");
 
-        String string = strB.toString();
-
-        System.out.println(string);
-
-        data.put(path, String.valueOf(string));
+        data.put(path, strB.toString());
 
     }
     public String getString(String path){
@@ -268,8 +283,9 @@ public class ConfigurationFile {
         arr[0] = arr[0].replace("[", "");
         arr[arr.length-1] = arr[arr.length-1].replace("]", "");
 
-        for(int i = 0; i< arr.length-1; i++){
-            arr[i] = arr[i].replace("\"", "");
+        for(int i = 0; i< arr.length; i++){
+            arr[i] = arr[i].replaceAll("\"", "");
+            arr[i] = arr[i].replace(" ", "");
         }
 
         return arr;
@@ -290,13 +306,16 @@ public class ConfigurationFile {
         String str;
         if(n == 0){
             str = arr[0].replace("[", "").toString();
-            return str.replace("\"", "");
+            str = str.replace(" ", "");
+            return str.replaceAll("\"", "");
         }
         if(n == arr.length-1){
             str = arr[arr.length-1].replace("]", "");
+            str = str.replace(" ", "");
             return str.replace("\"", "");
         }
         str = arr[n].replace(",", "");
+        str = str.replace(" ", "");
         return str.replace("\"", "");
     }
 

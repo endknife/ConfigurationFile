@@ -5,17 +5,24 @@ public class Main {
 
         ConfigurationFile config = new ConfigurationFile("config.yml");
 
+        String[] nomi = {"ale", "ste", "gio", "fra"};
 
-        System.out.println(config);
-        String[] frutta = {"fragole", "banane", "mango"};
-
-        config.add("frutti", frutta);
-
-        System.out.println(config.toString());
+        config.add("nomi", nomi);
 
         config.saveFile();
 
-        System.out.println(config.getArray("frutti", 0));
+        System.out.println("2.0 " + config.getArray("nomi", 2));
+
+        String[] valori = config.getArray("nomi");
+
+        for(String str : valori){
+            System.out.println(str);
+        }
+
+        System.out.println();
+
+        System.out.println(config.toString());
+
 
     }
 }
