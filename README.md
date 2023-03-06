@@ -8,6 +8,7 @@ The <b>`ConfigurationFile 1.02`</b> class provides a way to create and manage co
   <li><h4>Verson 1.02 03/06/23</h4></li>
   <ul>
   <li>Arrays completely added</li>
+  <li>Some optimisations</li>
 </ul>
 </ul>
 
