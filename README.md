@@ -3,8 +3,8 @@ The <b>`ConfigurationFile`</b> class provides a way to create and manage configu
 <br>
 <h2>Table of Contents</h2>
 <ul>
-  <li><h3>1. Class Variables</h3></li>
-  <li><h3>2. Constructors</h3></li>
+  <li><h4>1. Class Variables</h4></li>
+  <li><h4>2. Constructors</h4></li>
   <li></li>
 </ul>
 Class Variables
