@@ -23,8 +23,16 @@ The <b>`ConfigurationFile 1.02`</b> class provides a way to create and manage co
   <li><h4>2. Constructors</h4></li>
   <li><h4>3. Public Methods</h4></li>
   <ul>
-    <li><h5>1. isEmpty()</h5></li>
-    <li><h5>2. saveFile()</h5></li>
+    <li><h5>1. add(String path, String value)</h5></li>
+    <li><h5>2. add(String path, String[] array)</h5></li>
+    <li><h5>3. getString(String path)</h5></li>
+    <li><h5>4. getArray(String path)</h5></li>
+    <li><h5>5. getArray(String path, int value)</h5></li>
+    <li><h5>6. modifyString(String path, String value)</h5></li>
+    <li><h5>7. deleteString(String path)</h5></li>
+    <li><h5>8. deleteAll()</h5></li>
+    <li><h5>9. saveFile()</h5></li>
+    <li><h5>10. isEmpty()</h5></li>
   </ul>
   <li><h4>4. Private Methods</h4></li>
   <ul>
