@@ -1,7 +1,12 @@
 <h1>Java Documentation for<br> ConfigurationFile</h1>
 The <b>`ConfigurationFile`</b> class provides a way to create and manage configuration files. It contains methods to read, write, and manipulate configuration data. The class allows users to create and manage files containing simple variables, and supports the ability to create and manipulate more complex data types like lists and arrays in the future.
-
-Table of Contents
+<br>
+<h2>Table of Contents</h2>
+<ul>
+  <li><h3>1. Class Variables</h3></li>
+  <li><h3>2. Constructors</h3></li>
+  <li></li>
+</ul>
 Class Variables
 Constructor
 Public Methods
