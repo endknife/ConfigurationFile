@@ -5,17 +5,20 @@ The <b>`ConfigurationFile`</b> class provides a way to create and manage configu
 <ul>
   <li><h4>1. Class Variables</h4></li>
   <li><h4>2. Constructors</h4></li>
-  <li></li>
+  <li><h4>3. Public Methods</h4></li>
+  <ul>
+    <li><h5>1. isEmpty()</h5></li>
+    <li><h5>2. saveFile()</h5></li>
+  </ul>
+  <li><h4>4. Private Methods</h4></li>
+  <ul>
+    <li><h5>1. readFile()</h5></li>
+    <li><h5>2. writeFile()</h5></li>
+  </ul>
 </ul>
-Class Variables
-Constructor
-Public Methods
-isEmpty()
-saveFile()
-Private Methods
-readFile()
-writeFile()
-Class Variables
+<br>
+
+<h2>Class Variables</h2>
 REMOVE: a String constant representing a tab character that is used to remove tab characters from the configuration file.
 
 RESET: a String constant representing a color code that resets console text color.
