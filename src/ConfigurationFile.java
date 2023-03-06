@@ -209,15 +209,6 @@ public class ConfigurationFile {
         }
     }
 
-    /**
-     * Adds the data in a hashMap
-     * @param path
-     * @param value
-     */
-    public void add(String path, String value){
-        data.put(path, value);
-    }
-
     public void deleteString(String path){
         data.remove(path);
     }
@@ -231,6 +222,42 @@ public class ConfigurationFile {
         data.put(path, String.valueOf(value));
     }
 
+    /**
+     * Adds the data in a hashMap
+     * @param path
+     * @param value
+     */
+    public void add(String path, String value){
+        data.put(path, value);
+    }
+
+    public void add(String path, String[] array){
+        StringBuilder strB = new StringBuilder();
+        //str.append();
+        if(array == null){
+            System.out.println("array is null");
+            return;
+        }
+
+        strB.append("[");
+
+        for(String str : array){
+            strB.append("\"" + str + "\", ");
+        }
+
+        int last = strB.length();
+
+        strB.delete(last-2, last);
+
+        strB.append("]");
+
+        String string = strB.toString();
+
+        System.out.println(string);
+
+        data.put(path, String.valueOf(string));
+
+    }
     public String getString(String path){
         return data.get(path);
     }
@@ -273,6 +300,7 @@ public class ConfigurationFile {
         return str.replace("\"", "");
     }
 
+    //Non lo farò mai
     public int getInteger(String path){
         return Integer.parseInt(data.get(path));
     }

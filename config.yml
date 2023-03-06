@@ -1,14 +1,1 @@
-#Delete this if you wanna use the default file..
-#You can only save "strings" but if you use Integer.parseInt(value)
-#you can obtain the value of the sting in integer
-#Remember to delete the not implemented data structures
 
-#IMPLEMENTED
-name: "Alessandro"
-surname: "zago"
-age: "18"
-hasDriverLicence: "true"
-uid: "37y78i"
-
-#NOT IMPLEMENTED
-array: ["ciao", "banana", "patata"]
