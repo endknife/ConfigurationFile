@@ -1,4 +1,4 @@
-ava Documentation for ConfigurationFile
+<h1>Java Documentation for ConfigurationFile<h1/>
 The ConfigurationFile class provides a way to create and manage configuration files. It contains methods to read, write, and manipulate configuration data. The class allows users to create and manage files containing simple variables, and supports the ability to create and manipulate more complex data types like lists and arrays in the future.
 
 Table of Contents
