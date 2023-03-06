@@ -19,17 +19,15 @@ The <b>`ConfigurationFile`</b> class provides a way to create and manage configu
 <br>
 
 <h2>Class Variables</h2>
-REMOVE: a String constant representing a tab character that is used to remove tab characters from the configuration file.
+<ul>
+  <li>REMOVE: a String constant representing a tab character that is used to remove tab characters from the configuration file.</li>
+  <li>RESET: a String constant representing a color code that resets console text color.</li>
+  <li>BLACK, RED, GREEN, YELLOW, BLUE, PURPLE, CYAN, WHITE: String constants representing color codes that are used to color console output.</li>
+  <li>file: a File object representing the configuration file.</li>
+  <li>data: a HashMap object containing the configuration data.</li>
+</ul>
 
-RESET: a String constant representing a color code that resets console text color.
-
-BLACK, RED, GREEN, YELLOW, BLUE, PURPLE, CYAN, WHITE: String constants representing color codes that are used to color console output.
-
-file: a File object representing the configuration file.
-
-data: a HashMap object containing the configuration data.
-
-Constructor
+<h2>Constructor</h2>
 The ConfigurationFile constructor takes a single parameter, which is the path to the configuration file. It creates a new configuration file if one does not already exist, and reads in any data that is present in the file.
 
 java
