@@ -2,7 +2,7 @@
 The <b>`ConfigurationFile 1.02`</b> class provides a way to create and manage configuration files. It contains methods to read, write, and manipulate configuration data. The class allows users to create and manage files containing simple variables, and supports the ability to create and manipulate more complex data types like lists.
 <br>
 <h2>What is new</h2>
-<ul>Verson 1.02 03/06/23
+<ul><h3>Verson 1.02 03/06/23</h3>
   <li>Arrays complitly added</li>
 </ul>
 <br>
