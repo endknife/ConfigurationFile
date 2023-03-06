@@ -15,6 +15,12 @@ public class Main {
 
         config.add("job", "none");
 
-        config.saveFile();
+        System.out.println(config.getArray("array", 3));
+
+        String[] arr = config.getArray("array");
+
+        System.out.println(arr[0]);
+
+        System.out.println(config.toString());
     }
 }

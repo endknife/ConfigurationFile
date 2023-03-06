@@ -28,6 +28,21 @@ public class ConfigurationFile {
      * to <b>manage</b> a config file.
      * <br></br>
      * <br></br>
+     * <b>What covers this class?</b>
+     * <br></br>
+     * Implemented:
+     * <ul>
+     *     <li>Variables</li>
+     * </ul>
+     * Partially implemented:
+     * <ul>
+     *      <li>Objects</li>
+     * </ul>
+     * Coming soon:
+     * <ul>
+     *       <li>Lists</li>
+     *      <li>Arrays</li>
+     * </ul>
      * Created by ogaz
      * <br></br>
      *
@@ -149,12 +164,20 @@ public class ConfigurationFile {
                             builder = path.length();
                         }else{
                             //System.out.println("attributo");
-                            path.append(split[0].replace(":", ""));
+                            if(split[1].charAt(0) == '['){
+                                StringBuilder arr = new StringBuilder();
+                                for (int i = 1; i < split.length; i++) {
+                                    arr.append(split[i]);
+                                }
+                                data.put(split[0].replace(":", ""), arr.toString());
+                            }else{
+                                path.append(split[0].replace(":", ""));
 
-                            data.put(path.toString(), split[1].replace("\"", ""));
-                            System.out.println(path);
+                                data.put(path.toString(), split[1].replace("\"", ""));
+                                System.out.println(path);
 
-                            path.delete(builder, path.length());
+                                path.delete(builder, path.length());
+                            }
                         }
                     }else{
                         System.out.println(YELLOW + "A comment at line: " + couneter + " has been found!" + RESET);
@@ -210,6 +233,46 @@ public class ConfigurationFile {
 
     public String getString(String path){
         return data.get(path);
+    }
+
+    //TODO finish the getArray function
+    public String[] getArray(String path) {
+        String[] arr = data.get(path).split(",");
+        arr[0] = arr[0].replace("[", "");
+        arr[arr.length-1] = arr[arr.length-1].replace("]", "");
+
+        for(String str : arr){
+            str = str.replace("\"", "");
+        }
+
+        System.out.println(YELLOW + arr[arr.length-1] + RESET);
+
+        return arr;
+    }
+
+    public String getArray(String path, int n) {
+        if(n < 0){
+            System.out.println(RED + "You hav to put a positve number to get a content of a array" + RESET);
+            return "null";
+        }
+        String[] arr = data.get(path).split(",");
+        if(n > arr.length-1){
+            System.out.println(RED + "You hav to put a number that is smaller" + RESET);
+            return "null";
+        }
+
+
+        String str;
+        if(n == 0){
+            str = arr[0].replace("[", "").toString();
+            return str.replace("\"", "");
+        }
+        if(n == arr.length-1){
+            str = arr[arr.length-1].replace("]", "");
+            return str.replace("\"", "");
+        }
+        str = arr[n].replace(",", "");
+        return str.replace("\"", "");
     }
 
     public int getInteger(String path){
