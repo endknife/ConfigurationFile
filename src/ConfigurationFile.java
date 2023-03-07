@@ -84,28 +84,6 @@ public class ConfigurationFile {
             Scanner scanner = new Scanner(fr);
 
             //TODO devo migliorare la decodifica delle variabili dal file (oggetti), problemi con l'aggiornamento del path, se passo da un ogetto interno a esteron il mio algorittmo non capisce
-            /*
-            lo StringBuilder PATH contiene la path aggiornata della variabile
-            esempio:
-
-            --FILE--
-            Macchine:
-                Porsche:
-                    Modelli:
-                        911:
-                            cavalli: "190"
-                            creata: "15/08/98"
-                            cilindrata: "3000"
-                            kW: "80"
-                            ingenniere: "Fabio Gustavo"
-
-             --OUTPUT DELLE VARIE VARIABILI--
-             Macchine.Porsche.Modelli.911.cavalli: "190"
-             Macchine.Porsche.Modelli.911.creata: "15/08/98"
-             Macchine.Porsche.Modelli.911.cilindrata: "3000"
-             Macchine.Porsche.Modelli.911.kW: "80"
-             Macchine.Porsche.Modelli.911.ingenniere: "Fabio-Gustavo"
-             */
             StringBuilder path = new StringBuilder();
 
             int couneter = 0;
@@ -121,6 +99,18 @@ public class ConfigurationFile {
                 2) Verifica se è un commento o meno
                 3) Se la linea estratta dal file contiene un tab viene usata la funzione replace che rimpiazza il tab con nulla (REMOVE)
                  */
+
+                Character value = valueType(line);
+
+                switch (value){
+                    case 'O': break;
+                    case 'L': break;
+                    case 'A': break;
+                    case 'V': break;
+                    default: break;
+                }
+
+                /*
                 if(line.length() != 0){
 
                     if(line.charAt(0) != '#'){
@@ -157,6 +147,7 @@ public class ConfigurationFile {
                         System.out.println(YELLOW + "Found a comment at line " + couneter + RESET);
                     }
                 }
+                 */
            }
 
             fr.close();
@@ -164,6 +155,33 @@ public class ConfigurationFile {
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    public Character valueType(String str){
+        if(str.length() == 0) return null;
+        if(str.startsWith("#")) return null;
+
+        String[] args = str.split(" ");
+        if(args.length == 1 && Character.isUpperCase(args[0].charAt(0))){
+            System.out.println("object");
+            return 'O';
+        }
+
+        if(args.length == 1 && Character.isLowerCase(args[0].charAt(0))){
+            System.out.println("list");
+            return 'L';
+        }
+
+        if(args.length >= 2 && args[1].startsWith("[") && args[args.length-1].endsWith("]")){
+            System.out.println("array");
+            return 'A';
+        }
+
+        if(args.length == 2){
+            System.out.println("variable");
+            return 'V';
+        }
+        return null;
     }
 
     /**
@@ -174,8 +192,15 @@ public class ConfigurationFile {
             FileWriter fw = new FileWriter(file);
 
             for ( String key : data.keySet() ) {
-                if(data.get(key).startsWith("[") && data.get(key).endsWith("]")) fw.write(key + ": " + data.get(key) + "\n");
-                else fw.write(key + ": \"" + data.get(key) + "\"\n");
+                String str = key + " " + data.get(key);
+                Character value = valueType(str);
+
+                switch (value){
+                    case 'O': break;
+                    case 'L': break;
+                    case 'A': fw.write(key + ": " + data.get(key) + "\n"); break;
+                    case 'V': fw.write(key + ": \"" + data.get(key) + "\"\n"); break;
+                }
             }
             fw.flush();
             fw.close();
