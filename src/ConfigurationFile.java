@@ -1,67 +1,51 @@
-
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
+
 
 public class ConfigurationFile {
 
     private static final String REMOVE = "    ";
     private static final String RESET = "\u001B[0m";
-    private static final String BLACK = "\u001B[30m";
     private static final String RED = "\u001B[31m";
     private static final String GREEN = "\u001B[32m";
     private static final String YELLOW = "\u001B[33m";
     private static final String BLUE = "\u001B[34m";
-    private static final String PURPLE = "\u001B[35m";
-    private static final String CYAN = "\u001B[36m";
-    private static final String WHITE = "\u001B[37m";
 
     private File file;
     private HashMap<String, String> data;
 
     /**
-     * <b>ConfigurationFile()</b> is a class that creates you a configuration file.
-     * After that you create the object in your main fail you can use the various methods
-     * to <b>manage</b> a config file.
+     * <b>ConfigurationFile()</b> is a class that creates a configuration file for you.
+     * After you create the object in your main file you can use the methods of the class
+     * in order to <b>manage</b> a config file.
      * <br></br>
-     * <br></br>
-     * <b>What covers this class?</b>
-     * <br></br>
-     * Implemented:
+     *
+     * <b>Currently supported data types:</b>
      * <ul>
      *     <li>Variables</li>
      *     <li>Arrays</li>
      * </ul>
-     * Partially implemented:
-     * <ul>
-     *      <li>Objects</li>
-     * </ul>
-     * Coming soon:
-     * <ul>
-     *       <li>Lists</li>
-     * </ul>
-     * Created by ogaz
+     * TODO Finish implementing Objects
      * <br></br>
+     * TODO Implement Lists
      *
-     * @param path
+     * @author ogaz_zago
+     *
+     * @param path Path of the configuration file
      */
     ConfigurationFile(String path) {
         try{
             this.file = new File(path);
 
-            if(file.createNewFile()){
-                System.out.println(BLUE + "File created: " + file.getName() + " in the following path: " + file.getAbsolutePath() + RESET);
-            }else{
-                System.out.println(GREEN + "Preparing file variables of " + file.getName() + RESET);
-            }
+            if(file.createNewFile()) System.out.println(BLUE + "Created file " + file.getName() + " with following path: " + file.getAbsolutePath() + RESET);
+            else System.out.println(GREEN + "Preparing variables from file " + file.getName() + RESET);
 
             this.data = new HashMap<>();
-            if(!isEmpty()){
-                readFile();
-            }
+            if(!isEmpty()) readFile();
 
         }catch (IOException e){
             e.printStackTrace();
@@ -69,20 +53,16 @@ public class ConfigurationFile {
 
     }
 
-    /**
+    /** Checks if a file is empty or not
      *
-     * @return if the fiele is empty
+     * @return true or false depending on the file contents being empty or not
      */
-    public boolean isEmpty(){
-        return file.length() == 0;
-    }
+    public boolean isEmpty(){ return file.length() == 0; }
 
     /**
-     * Saves the variables that are saved in your system memory in the selected file. Use it after that you end the program!
+     * Saves the variables from the memory of your system to the selected file. Use it after editing!
      */
-    public void saveFile(){
-        writeFile();
-    }
+    public void saveFile(){ writeFile(); }
 
     //TODO gestire se ci sono ogetti
     /*
@@ -96,7 +76,7 @@ public class ConfigurationFile {
      * per ora riesco a gestire tante variabili ma nessun costrutto...
      */
     /**
-     * private function that is made to read the file line by line and saved the information in a hashMap that is named data.
+     * Private function used to read the file line by line and save the information in a hashMap named "data".
      */
     private void readFile(){
         try {
@@ -119,7 +99,7 @@ public class ConfigurationFile {
                             kW: "80"
                             ingenniere: "Fabio Gustavo"
 
-             --OUTPUT DELLE VATIE VARIABILI--
+             --OUTPUT DELLE VARIE VARIABILI--
              Macchine.Porsche.Modelli.911.cavalli: "190"
              Macchine.Porsche.Modelli.911.creata: "15/08/98"
              Macchine.Porsche.Modelli.911.cilindrata: "3000"
@@ -144,11 +124,7 @@ public class ConfigurationFile {
                 if(line.length() != 0){
 
                     if(line.charAt(0) != '#'){
-                        if(line.contains(REMOVE)){
-                            line = line.replace(REMOVE, "");
-                        }else{
-
-                        }
+                        if(line.contains(REMOVE)) line = line.replace(REMOVE, "");
 
                         //Split delle stringhe in un array delimitato dallo spazzio " ".
                         String[] split = line.split(" ");
@@ -160,15 +136,13 @@ public class ConfigurationFile {
                         //se invece trova un'attributo lo aggiunge per poi toglierlo (non mi so spiegare)
                         if(split.length == 1){
                             //System.out.println("ogetto");
-                            path.append(split[0].replace(":", "") + ".");
+                            path.append(split[0].replace(":", "")).append(".");
                             builder = path.length();
                         }else{
                             //System.out.println("attributo");
                             if(split[1].charAt(0) == '['){
                                 StringBuilder arr = new StringBuilder();
-                                for (int i = 1; i < split.length; i++) {
-                                    arr.append(split[i]);
-                                }
+                                for (int i = 1; i < split.length; i++) arr.append(split[i]);
                                 data.put(split[0].replace(":", ""), arr.toString());
                             }else{
                                 path.append(split[0].replace(":", ""));
@@ -180,7 +154,7 @@ public class ConfigurationFile {
                             }
                         }
                     }else{
-                        System.out.println(YELLOW + "A comment at line: " + couneter + " has been found!" + RESET);
+                        System.out.println(YELLOW + "Found a comment at line " + couneter + RESET);
                     }
                 }
            }
@@ -193,89 +167,66 @@ public class ConfigurationFile {
     }
 
     /**
-     * private function that writes the information in the hashMap named data in the file.
+     * Private function that writes the information from the hashMap named "data" into the file.
      */
     private void writeFile(){
         try{
             FileWriter fw = new FileWriter(file);
 
             for ( String key : data.keySet() ) {
-                if(data.get(key).startsWith("[") && data.get(key).endsWith("]")){
-                    fw.write(key + ": " + data.get(key) + "\n");
-                }else{
-                    fw.write(key + ": \"" + data.get(key) + "\"\n");
-                }
+                if(data.get(key).startsWith("[") && data.get(key).endsWith("]")) fw.write(key + ": " + data.get(key) + "\n");
+                else fw.write(key + ": \"" + data.get(key) + "\"\n");
             }
             fw.flush();
             fw.close();
         }catch (IOException e){
-
+            e.printStackTrace();
         }
     }
 
-    public void deleteString(String path){
-        data.remove(path);
-    }
+    public void deleteString(String path) { data.remove(path); }
 
     public void deleteAll(){
-        if(isEmpty()){
-            System.out.println(YELLOW + "File is already empty");
-        }else{
-            try {
+        if(isEmpty()) System.out.println(YELLOW + "File is already empty");
+        else try {
                 FileWriter fr = new FileWriter(file);
 
                 fr.flush();
                 fr.close();
             }catch (IOException e){
-
+                e.printStackTrace();
             }
-        }
     }
 
-    public void modifyString(String path, String value){
-        data.put(path, value);
-    }
+    public void modifyString(String path, String value) { data.put(path, value); }
 
     //TODO there is a problem, if i save the data in the data hashMap i can't understand if it is a string or a integer
-    public void add(String path, int value){
-        data.put(path, String.valueOf(value));
-    }
+    public void add(String path, int value) { data.put(path, String.valueOf(value)); }
 
     /**
-     * Adds the data in a hashMap
-     * @param path
-     * @param value
+     * Adds data to a hashMap
+     *
+     * @param path you can see this as the key most of the times
+     * @param value String containing the value
      */
-    public void add(String path, String value){
-        data.put(path, value);
-    }
+    public void add(String path, String value) { data.put(path, value); }
 
     public void add(String path, String[] array){
         StringBuilder strB = new StringBuilder();
         //str.append();
         if(array == null){
-            System.out.println(RED + "The array that was given is null!" + RESET);
+            System.out.println(RED + "The given array is null!" + RESET);
             return;
         }
-
         strB.append("[");
-
-        for(String str : array){
-            strB.append("\"" + str + "\", ");
-        }
-
+        for(String str : array) strB.append("\"").append(str).append("\", ");
         int last = strB.length();
-
         strB.delete(last-2, last);
-
         strB.append("]");
 
         data.put(path, strB.toString());
-
     }
-    public String getString(String path){
-        return data.get(path);
-    }
+    public String getString(String path){ return data.get(path); }
 
     //TODO finish the getArray function
     public String[] getArray(String path) {
@@ -283,40 +234,25 @@ public class ConfigurationFile {
         arr[0] = arr[0].replace("[", "");
         arr[arr.length-1] = arr[arr.length-1].replace("]", "");
 
-        for(int i = 0; i< arr.length; i++){
-            arr[i] = arr[i].replaceAll("\"", "");
-            arr[i] = arr[i].replace(" ", "");
-        }
+        for(int i = 0; i< arr.length; i++) arr[i] = arr[i].replaceAll("\"", "").replace(" ", "");
 
         return arr;
     }
 
     public String getArray(String path, int n) {
         if(n < 0){
-            System.out.println(RED + "You hav to put a positve number to get a content of a array" + RESET);
+            System.out.println(RED + "Positive integer number requested in order to get the content of an array" + RESET);
             return "null";
         }
         String[] arr = data.get(path).split(",");
         if(n > arr.length-1){
-            System.out.println(RED + "You hav to put a number that is smaller" + RESET);
+            System.out.println(RED + "The number is too big" + RESET);
             return "null";
         }
 
-
-        String str;
-        if(n == 0){
-            str = arr[0].replace("[", "").toString();
-            str = str.replace(" ", "");
-            return str.replaceAll("\"", "");
-        }
-        if(n == arr.length-1){
-            str = arr[arr.length-1].replace("]", "");
-            str = str.replace(" ", "");
-            return str.replace("\"", "");
-        }
-        str = arr[n].replace(",", "");
-        str = str.replace(" ", "");
-        return str.replace("\"", "");
+        if(n == 0) return arr[0].replace("[", "").replace(" ", "").replaceAll("\"", "");
+        if(n == arr.length-1) return arr[arr.length-1].replace("]", "").replace(" ", "").replace("\"", "");
+        return arr[n].replace(",", "").replace(" ", "").replace("\"", "");
     }
 
     //Non lo farò mai
@@ -327,11 +263,7 @@ public class ConfigurationFile {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
-
-        for ( String key : data.keySet() ) {
-            str.append(key + ": " + data.get(key) + "\n");
-        }
-
+        for ( String key : data.keySet() ) str.append(key).append(": ").append(data.get(key)).append("\n");
         return str.toString();
     }
 }
