@@ -201,17 +201,29 @@ public class ConfigurationFile {
 
         data.put(path, strB.toString());
     }
-    public String getString(String path){ return data.get(path); }
+    public String getString(String path){
+        try{
+            return data.get(path);
+        }catch (Exception e){
+            System.out.println(RED + "Error in trying to get the string " + YELLOW + path + RED + " in the HashMap" + RESET);
+            return null;
+        }
+    }
 
     //TODO finish the getArray function
     public String[] getArray(String path) {
-        String[] arr = data.get(path).split(",");
-        arr[0] = arr[0].replace("[", "");
-        arr[arr.length-1] = arr[arr.length-1].replace("]", "");
+        try{
+            String[] arr = data.get(path).split(",");
+            arr[0] = arr[0].replace("[", "");
+            arr[arr.length-1] = arr[arr.length-1].replace("]", "");
 
-        for(int i = 0; i< arr.length; i++) arr[i] = arr[i].replaceAll("\"", "").replace(" ", "");
+            for(int i = 0; i< arr.length; i++) arr[i] = arr[i].replaceAll("\"", "").replace(" ", "");
 
-        return arr;
+            return arr;
+        }catch (Exception e){
+            System.out.println(RED + "Error in trying to get the array " + YELLOW + path + RED + " in the HashMap" + RESET);
+            return null;
+        }
     }
 
     public String getArray(String path, int n) {

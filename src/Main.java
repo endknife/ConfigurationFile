@@ -7,6 +7,8 @@ public class Main {
 
         System.out.println(config.toString());
 
+        System.out.println(config.getString("ciao"));
+
         config.saveFile();
     }
 }
