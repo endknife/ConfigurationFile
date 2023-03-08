@@ -7,6 +7,6 @@ public class Main {
 
         System.out.println(config.toString());
 
-
+        config.saveFile();
     }
 }

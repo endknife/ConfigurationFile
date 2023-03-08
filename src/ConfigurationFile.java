@@ -64,17 +64,23 @@ public class ConfigurationFile {
      */
     public void saveFile(){ writeFile(); }
 
+    private void putArrayVariableInHash(String line, char type){
+        String key;
+        StringBuilder content = new StringBuilder();
+
+        String[] args = line.split(" ");
+        key = args[0].replace(":", "");
+
+        for(int i = 1; i < args.length; i++){
+            if(i == args.length-1) content.append(args[i]); else content.append(args[i] + " ");
+        }
+
+        if(type == 'A') data.put(key, content.toString());
+        else data.put(key, content.toString().replace("\"", ""));
+
+    }
+
     //TODO gestire se ci sono ogetti
-    /*
-     *esempio:
-     *
-     * Persona:
-     *   nome: "Marco"
-     *   eta: 30
-     *   sesso: M
-     *
-     * per ora riesco a gestire tante variabili ma nessun costrutto...
-     */
     /**
      * Private function used to read the file line by line and save the information in a hashMap named "data".
      */
@@ -84,70 +90,21 @@ public class ConfigurationFile {
             Scanner scanner = new Scanner(fr);
 
             //TODO devo migliorare la decodifica delle variabili dal file (oggetti), problemi con l'aggiornamento del path, se passo da un ogetto interno a esteron il mio algorittmo non capisce
-            StringBuilder path = new StringBuilder();
-
-            int couneter = 0;
-            int builder = 0;
 
             while(scanner.hasNextLine()){
-                couneter++;
-                //System.out.println(RED + "couneter: " + couneter + RESET);
-                String line = scanner.nextLine();
 
-                /*
-                1) Verifica se la lunghezza è diversa da zero
-                2) Verifica se è un commento o meno
-                3) Se la linea estratta dal file contiene un tab viene usata la funzione replace che rimpiazza il tab con nulla (REMOVE)
-                 */
+                String line = scanner.nextLine();
 
                 Character value = valueType(line);
 
                 switch (value){
                     case 'O': break;
                     case 'L': break;
-                    case 'A': break;
-                    case 'V': break;
-                    default: break;
+                    case 'A', 'V':
+                        putArrayVariableInHash(line, value);
+                        break;
+                    default: break; //When value returns    N(null) || Z(zero) || C(comment)
                 }
-
-                /*
-                if(line.length() != 0){
-
-                    if(line.charAt(0) != '#'){
-                        if(line.contains(REMOVE)) line = line.replace(REMOVE, "");
-
-                        //Split delle stringhe in un array delimitato dallo spazzio " ".
-                        String[] split = line.split(" ");
-
-                        //System.out.println(split.length);
-
-                        //Se l'array è lungo soltanto uno, significa che è un'oggetto, sennò un'attributo.
-                        //se oggetto aggiunge al path il nome dell'ogetto mettendoci un punto alla fine.
-                        //se invece trova un'attributo lo aggiunge per poi toglierlo (non mi so spiegare)
-                        if(split.length == 1){
-                            //System.out.println("ogetto");
-                            path.append(split[0].replace(":", "")).append(".");
-                            builder = path.length();
-                        }else{
-                            //System.out.println("attributo");
-                            if(split[1].charAt(0) == '['){
-                                StringBuilder arr = new StringBuilder();
-                                for (int i = 1; i < split.length; i++) arr.append(split[i]);
-                                data.put(split[0].replace(":", ""), arr.toString());
-                            }else{
-                                path.append(split[0].replace(":", ""));
-
-                                data.put(path.toString(), split[1].replace("\"", ""));
-                                ///System.out.println(path);
-
-                                path.delete(builder, path.length());
-                            }
-                        }
-                    }else{
-                        System.out.println(YELLOW + "Found a comment at line " + couneter + RESET);
-                    }
-                }
-                 */
            }
 
             fr.close();
@@ -157,31 +114,25 @@ public class ConfigurationFile {
         }
     }
 
-    public Character valueType(String str){
-        if(str.length() == 0) return null;
-        if(str.startsWith("#")) return null;
+    /**
+     * valueType() is a function that is used in read and writeFile(). It is used to detect the data type of line -> (key, value).
+     * @param str is the analyzed string
+     * @return A
+     */
+    private Character valueType(String str){
+        if(str.length() == 0) return 'Z';
+        if(str.startsWith("#")) return 'C';
 
         String[] args = str.split(" ");
-        if(args.length == 1 && Character.isUpperCase(args[0].charAt(0))){
-            System.out.println("object");
-            return 'O';
-        }
+        if(args.length == 1 && Character.isUpperCase(args[0].charAt(0))) return 'O';
 
-        if(args.length == 1 && Character.isLowerCase(args[0].charAt(0))){
-            System.out.println("list");
-            return 'L';
-        }
+        if(args.length == 1 && Character.isLowerCase(args[0].charAt(0))) return 'L';
 
-        if(args.length >= 2 && args[1].startsWith("[") && args[args.length-1].endsWith("]")){
-            System.out.println("array");
-            return 'A';
-        }
+        if(args.length >= 2 && args[1].startsWith("[") && args[args.length-1].endsWith("]")) return 'A';
 
-        if(args.length == 2){
-            System.out.println("variable");
-            return 'V';
-        }
-        return null;
+        if(args.length >= 2) return 'V';
+
+        return 'N';
     }
 
     /**
@@ -238,7 +189,6 @@ public class ConfigurationFile {
 
     public void add(String path, String[] array){
         StringBuilder strB = new StringBuilder();
-        //str.append();
         if(array == null){
             System.out.println(RED + "The given array is null!" + RESET);
             return;
@@ -265,19 +215,24 @@ public class ConfigurationFile {
     }
 
     public String getArray(String path, int n) {
-        if(n < 0){
-            System.out.println(RED + "Positive integer number requested in order to get the content of an array" + RESET);
-            return "null";
-        }
-        String[] arr = data.get(path).split(",");
-        if(n > arr.length-1){
-            System.out.println(RED + "The number is too big" + RESET);
-            return "null";
-        }
+        try{
+            if(n < 0){
+                System.out.println(RED + "Positive integer number requested in order to get the content of an array" + RESET);
+                return "null";
+            }
+            String[] arr = data.get(path).split(",");
+            if(n > arr.length-1){
+                System.out.println(RED + "The number is too big" + RESET);
+                return "null";
+            }
 
-        if(n == 0) return arr[0].replace("[", "").replace(" ", "").replaceAll("\"", "");
-        if(n == arr.length-1) return arr[arr.length-1].replace("]", "").replace(" ", "").replace("\"", "");
-        return arr[n].replace(",", "").replace(" ", "").replace("\"", "");
+            if(n == 0) return arr[0].replace("[", "").replace(" ", "").replaceAll("\"", "");
+            if(n == arr.length-1) return arr[arr.length-1].replace("]", "").replace(" ", "").replace("\"", "");
+            return arr[n].replace(",", "").replace(" ", "").replace("\"", "");
+        }catch (Exception e){
+            System.out.println(RED + "Error in trying to get the array " + YELLOW + path + RED + " in the HashMap" + RESET);
+            return null;
+        }
     }
 
     //Non lo farò mai
@@ -292,4 +247,3 @@ public class ConfigurationFile {
         return str.toString();
     }
 }
-
