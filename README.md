@@ -5,7 +5,12 @@ The <b>`ConfigurationFile 1.02`</b> class provides a way to create and manage co
 <h2>What is new</h2>
 
 <ul>
-  <li><h4>Verson 1.02 03/06/23</h4></li>
+  <li><h4>Version 1.0 Beta 13/03/2023</h4></li>
+  <ul>
+    <li>Optimisation of code</li>
+    <li>Mor readable code</li>
+  </ul>
+  <li><h4>Version 0.9 03/06/23</h4></li>
   <ul>
     <li>Arrays completely added</li>
     <li>Some optimisations</li>
